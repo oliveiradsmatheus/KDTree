@@ -1,5 +1,5 @@
 #define K 2
-#define TF 5
+#define TF 20
 
 struct kdtree {
 	int ponto[2];
@@ -111,32 +111,7 @@ void Ordena(int Pontos[TF][K], int D, int ini, int fim) {
 			}
 		}
 	}
-	/*while(fim >= ini) {
-		for(i=ini; i<fim; i++) {
-			if(Pontos[i][D] > Pontos[i+1][D]) {
-				aux[0] = Pontos[i][0];
-				aux[1] = Pontos[i][1];
-				Pontos[i][0] = Pontos[i+1][0];
-				Pontos[i][1] = Pontos[i+1][1];
-				Pontos[i+1][0] = aux[0];
-				Pontos[i+1][1] = aux[1];
-			}
-		}
-		fim--;
-	}*/
 }
-
-/*void InsereArvoreR (KDTree **raiz, int Pontos[TF][K], int ini, int fim, int N) {
-	int D, meio;
-	if(ini<fim) {
-		D = N%K;
-		Ordena(Pontos,D,ini,fim);
-		meio = (ini+fim-1)/2;
-		*raiz = CriaNo(Pontos[meio]);
-		InsereArvoreR(&(*raiz)->esq,Pontos,ini,meio,N+1);
-		InsereArvoreR(&(*raiz)->dir,Pontos,meio+1,fim,N+1);
-	}
-}*/
 
 void InsereArvoreR (KDTree **raiz, int Pontos[TF][K], int ini, int fim, int N) {
 	int D, meio;
@@ -153,8 +128,7 @@ void InsereArvoreR (KDTree **raiz, int Pontos[TF][K], int ini, int fim, int N) {
 void InserePontos (int Pontos[TF][K], int Ponto[K], int *raio) {
 	int i=0;
 
-	srand(4);
-	//srand(time(NULL));
+	srand(time(NULL));
 	*raio = rand() % 10 + 1;
 	Ponto[0] = rand() % 40 + 1;
 	Ponto[1] = rand() % 40 + 1;
@@ -166,21 +140,19 @@ void InserePontos (int Pontos[TF][K], int Ponto[K], int *raio) {
 }
 
 void DesenhaPlano (KDTree *raiz, int CI, int LI ,int CF, int LF, int N) {
-	int D,i;
+	int i;
 
 	if(raiz) {
-		D = N%K;
-
 		textbackground(8);
 		textcolor(15);
 		gotoxy(4 + 3*raiz->ponto[0],48);
 		printf("%d",raiz->ponto[0]);
-		gotoxy(5, 7 + (raiz->ponto[1]));
+		gotoxy(5, 48 - (raiz->ponto[1]));
 		printf("%d",raiz->ponto[1]);
 		textbackground(7);
 		textcolor(0);
-
-		if (D == 0) { // eixo X
+		
+		if (N%K == 0) { // eixo X
 			if(raiz->ponto[0] != 1 && raiz->ponto[0] != 40) {
 				gotoxy(4 + 3*raiz->ponto[0],LI);
 				printf("%c",203);
@@ -197,21 +169,21 @@ void DesenhaPlano (KDTree *raiz, int CI, int LI ,int CF, int LF, int N) {
 			DesenhaPlano(raiz->dir,4 + 3*raiz->ponto[0],LI,CF,LF,N+1);
 		} else {
 			if(raiz->ponto[1] != 1 && raiz->ponto[1] != 40) {
-				gotoxy(CI,7 + raiz->ponto[1]);
+				gotoxy(CI,48 - raiz->ponto[1]);
 				printf("%c",204);
-				gotoxy(CF,7 + raiz->ponto[1]);
+				gotoxy(CF,48 - raiz->ponto[1]);
 				printf("%c",185);
 				i = CI + 1;
 				while(i<CF) {
-					gotoxy(i,7 + raiz->ponto[1]);
+					gotoxy(i,48 - raiz->ponto[1]);
 					printf("%c",205);
 					i++;
 				}
 			}
-			DesenhaPlano(raiz->esq,CI,LI,CF,7 + raiz->ponto[1],N+1);
-			DesenhaPlano(raiz->dir,CI,7 + raiz->ponto[1],CF,LF,N+1);
+			DesenhaPlano(raiz->esq,CI,48 - raiz->ponto[1],CF,LF,N+1);
+			DesenhaPlano(raiz->dir,CI,LI,CF,48 - raiz->ponto[1],N+1);
 		}
-		gotoxy(4 + 3*raiz->ponto[0],7 + raiz->ponto[1]);
+		gotoxy(4 + 3*raiz->ponto[0],48 - raiz->ponto[1]);
 		textcolor(0);
 		printf("%c (%d,%d)",207,raiz->ponto[0],raiz->ponto[1]);
 		textcolor(0);
@@ -227,8 +199,6 @@ void ExibeDados (int Ponto[K], int raio) {
 
 	sprintf(Print,"PONTO DE REFERENCIA: (%d,%d)   -   RAIO: %d",Ponto[0],Ponto[1],raio);
 	ExibeTexto(130,3,0,7,Print,"DADOS:");
-
-	getch();
 }
 
 void ExibePlano (KDTree *raiz, int Ponto[K], int CI, int LI, int CF, int LF, int N) {
@@ -242,7 +212,7 @@ void ExibePlano (KDTree *raiz, int Ponto[K], int CI, int LI, int CF, int LF, int
 
 	DesenhaPlano(raiz,CI+3,LI+1,CI+120,LI+40,0);
 
-	gotoxy(CI + Ponto[0]*3,LI + Ponto[1]);
+	gotoxy(CI + Ponto[0]*3,48 - Ponto[1]);
 	textcolor(12);
 	printf("%c (%d,%d)",207,Ponto[0],Ponto[1]);
 	textcolor(0);
@@ -290,7 +260,7 @@ void ExibeArvore(KDTree *raiz) {
 	ExibeVertical(raiz,1,13);
 }
 
-int DistanciaEuclidiana (int A[2], int B[2]) {
+double DistanciaEuclidiana (int A[2], int B[2]) {
 	return sqrt((A[0]-B[0])*(A[0]-B[0]) + (A[1]-B[1])*(A[1]-B[1]));
 }
 
