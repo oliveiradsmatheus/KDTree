@@ -36,12 +36,12 @@ void InsereArvore (KDTree **raiz, int Pontos[TF][K]) {
 		popI(&PN,&N);
 		popI(&PI,&ini);
 		popI(&PF,&fim);
-		
+
 		if(ini<fim) {
 			D=N%K;
 			meio = (ini+fim)/2;
 			if(meio + 1 < fim) {
-				
+
 				Ordena(Pontos,D,meio+1,fim);
 				meioD = ((meio + 1) + fim)/2;
 				Pai->dir = CriaNo(Pontos[meioD]);
@@ -65,6 +65,7 @@ void InsereArvore (KDTree **raiz, int Pontos[TF][K]) {
 
 void BuscaProximos (Lista **L, KDTree *raiz, int Pto[K], int raio) {
 	Pilha *P;
+	Pilha *Pf;
 
 	init(&P);
 	push(&P,raiz);
@@ -103,7 +104,7 @@ int main (void) {
 	getch();
 	ExibeProximos(L);
 	getch();
-	
+
 
 	MsgFim();
 	getch();

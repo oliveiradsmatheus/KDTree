@@ -140,7 +140,7 @@ void InsereArvoreR (KDTree **raiz, int Pontos[TF][K], int ini, int fim, int N) {
 
 void InserePontos (int Pontos[TF][K], int Ponto[K], int *raio) { // KD
 	int i,j;
-
+	
 	srand(time(NULL));
 	*raio = rand() % 10 + 1;
 	for(i=0; i<K; i++)
