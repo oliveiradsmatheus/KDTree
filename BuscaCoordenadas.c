@@ -84,21 +84,21 @@ void BuscaProximos (Lista **L, KDTree *raiz, int Pto[K], int raio) {
 int main (void) {
 	KDTree *T = NULL;
 	Lista *L = NULL;
-	int Pontos[TF][2], Ponto[2], raio;
+	int Pontos[TF][K], Ponto[K], raio;
 
 	RetiraCursor();
 	Dimensao();
 	MolduraCompleta();
 
-	InserePontos(Pontos,Ponto,&raio); // Gera 20 pontos aleatórios (2 dimensões) de 1 a 40.
-	ExibePontos(Pontos); // Exibe os pontos antes da ordenação
+	InserePontos(Pontos,Ponto,&raio); // Gera 20 pontos aleatórios (X dimensões) de 1 a 40.
+	ExibePontos(Pontos); // Exibe os pontos antes da ordenação (2 dimensões)
 	//InsereArvoreR(&T,Pontos,0,TF,0); // Insere os pontos na árvore do tipo KD-Tree de maneira Recursiva
 	InsereArvore(&T,Pontos); // Insere os pontos na árvore do tipo KD-Tree de maneira Iterativa
 	ExibeArvore(T);
 	getch();
 
 	ExibeDados(Ponto,raio);
-	ExibePlano(T,Ponto,4,7,130,49,0);
+	ExibePlano(T,Ponto,4,7,130,49,0); // Funciona apenas para 2D
 	BuscaProximos(&L,T,Ponto,raio);
 	getch();
 	ExibeProximos(L);
