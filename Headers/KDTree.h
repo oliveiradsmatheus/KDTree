@@ -203,7 +203,7 @@ void DesenhaPlano (KDTree *raiz, int CI, int LI ,int CF, int LF, int N) { // 2D
 
 void ExibeDados (int Ponto[K], int raio) {
 	int i;
-	char Print[150]="", aux[30];
+	char Print[300]="", aux[50];
 
 	system("mode con cols=133 lines=52");
 	Moldura(1,1,133,52,0,3);
@@ -242,7 +242,7 @@ void ExibePlano (KDTree *raiz, int Ponto[K], int CI, int LI, int CF, int LF, int
 
 void ExibePontos(int Pontos[TF][K]) {
 	int i=0,j, CI, CF;
-	char PLinha[100]="",SLinha[100]="",aux[20];
+	char PLinha[200]="",SLinha[200]="",aux[50];
 
 	while(i<TF/2) {
 		strcat(PLinha,"(");
