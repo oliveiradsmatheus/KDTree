@@ -24,7 +24,7 @@ KDTree *CriaNo (int Ponto[K]) {
 	KDTree *NC = (KDTree*)malloc(sizeof(KDTree));
 
 	NC->esq = NC->dir = NULL;
-	for(i=0;i<K;i++)
+	for(i=0; i<K; i++)
 		NC->ponto[i] = Ponto[i];
 
 	return NC;
@@ -99,7 +99,7 @@ void ExibeHorizontal (KDTree *raiz) {
 		for(i=0; i<5*n; i++)
 			printf(" ");
 		printf("(");
-		for(i=0;i<K;i++) {
+		for(i=0; i<K; i++) {
 			printf("%d",raiz->ponto[i]);
 			if(i+1 == K)
 				printf(")");
@@ -150,7 +150,8 @@ void InserePontos (int Pontos[TF][K], int Ponto[K], int *raio) { // KD
 			Pontos[i][j] = rand() % 40 + 1; // A função rand() % N gera um número aleatório de zero até o número contido na variável N menos 1
 }
 
-void DesenhaPlano (KDTree *raiz, int CI, int LI ,int CF, int LF, int N) { // 2D
+void DesenhaPlano (KDTree *raiz, int CI, int LI ,int CF, int LF, int N, Pont **Linha, Pont **Coluna) { // 2D
+	MatEsp *Campo;
 	int i;
 
 	if(raiz) {
@@ -165,34 +166,100 @@ void DesenhaPlano (KDTree *raiz, int CI, int LI ,int CF, int LF, int N) { // 2D
 
 		if (N%K == 0) { // eixo X
 			if(raiz->ponto[0] != 1 && raiz->ponto[0] != 40) {
-				gotoxy(4 + 3*raiz->ponto[0],LI);
-				printf("%c",203);
-				gotoxy(4 + 3*raiz->ponto[0],LF);
-				printf("%c",202);
+				BuscaCampo(*Linha,48-LI,raiz->ponto[0],&Campo); // Campo do Inicio
+				if(!Campo) {
+					InsereMat(&*Linha,&*Coluna,48-LI,raiz->ponto[0],203);
+					gotoxy(4 + 3*raiz->ponto[0],LI);
+					printf("%c",203);
+				} else {
+					switch(Campo->valor) {
+						case 205:
+							Campo->valor = 203;
+							break;
+						case 202:
+							Campo->valor = 206;
+							break;
+					}
+					gotoxy(4 + 3*raiz->ponto[0],LI);
+					printf("%c",Campo->valor);
+				}
+				BuscaCampo(*Linha,48-LF,raiz->ponto[0],&Campo);
+				if(!Campo) {
+					InsereMat(&*Linha,&*Coluna,48-LF,raiz->ponto[0],202);
+					gotoxy(4 + 3*raiz->ponto[0],LF);
+					printf("%c",202);
+				} else {
+					switch(Campo->valor) {
+						case 205:
+							Campo->valor = 202;
+							break;
+						case 203:
+							Campo->valor = 206;
+							break;
+					}
+					gotoxy(4 + 3*raiz->ponto[0],LF);
+					printf("%c",Campo->valor);
+				}
 				i = LI + 1;
 				while(i<LF) {
+					BuscaCampo(*Linha,48-i,raiz->ponto[0],&Campo);
+					if(!Campo)
+						InsereMat(&*Linha,&*Coluna,48-i,raiz->ponto[0],186);
 					gotoxy(4 + 3*raiz->ponto[0],i);
 					printf("%c",186);
 					i++;
 				}
 			}
-			DesenhaPlano(raiz->esq,CI,LI,4 + 3*raiz->ponto[0],LF,N+1);
-			DesenhaPlano(raiz->dir,4 + 3*raiz->ponto[0],LI,CF,LF,N+1);
+			DesenhaPlano(raiz->esq,CI,LI,4 + 3*raiz->ponto[0],LF,N+1,&*Linha,&*Coluna);
+			DesenhaPlano(raiz->dir,4 + 3*raiz->ponto[0],LI,CF,LF,N+1,&*Linha,&*Coluna);
 		} else {
 			if(raiz->ponto[1] != 1 && raiz->ponto[1] != 40) {
-				gotoxy(CI,48 - raiz->ponto[1]);
-				printf("%c",204);
-				gotoxy(CF,48 - raiz->ponto[1]);
-				printf("%c",185);
+				BuscaCampo(*Linha,raiz->ponto[1],CI/3-1,&Campo); // Campo do Inicio
+				if(!Campo) {
+					InsereMat(&*Linha,&*Coluna,raiz->ponto[1],CI/3-1,204);
+					gotoxy(CI,48 - raiz->ponto[1]);
+					printf("%c",204);
+				} else {
+					switch(Campo->valor) {
+						case 186:
+							Campo->valor = 204;
+							break;
+						case 185:
+							Campo->valor = 206;
+							break;
+					}
+					gotoxy(CI,48 - raiz->ponto[1]);
+					printf("%c",Campo->valor);
+				}
+				BuscaCampo(*Linha,raiz->ponto[1],CF/3-1,&Campo);
+				if(!Campo) {
+					InsereMat(&*Linha,&*Coluna,raiz->ponto[1],CF/3-1,185);
+					gotoxy(CF,48 - raiz->ponto[1]);
+					printf("%c",185);
+				} else {
+					switch(Campo->valor) {
+						case 186:
+							Campo->valor = 185;
+							break;
+						case 204:
+							Campo->valor = 206;
+							break;
+					}
+					gotoxy(CF,48 - raiz->ponto[1]);
+					printf("%c",Campo->valor);
+				}
 				i = CI + 1;
 				while(i<CF) {
+					BuscaCampo(*Linha,raiz->ponto[1],i/3-1,&Campo);
+					if(!Campo)
+						InsereMat(&*Linha,&*Coluna,raiz->ponto[1],i/3-1,205);
 					gotoxy(i,48 - raiz->ponto[1]);
 					printf("%c",205);
 					i++;
 				}
 			}
-			DesenhaPlano(raiz->esq,CI,48 - raiz->ponto[1],CF,LF,N+1);
-			DesenhaPlano(raiz->dir,CI,LI,CF,48 - raiz->ponto[1],N+1);
+			DesenhaPlano(raiz->esq,CI,48 - raiz->ponto[1],CF,LF,N+1,&*Linha,&*Coluna);
+			DesenhaPlano(raiz->dir,CI,LI,CF,48 - raiz->ponto[1],N+1,&*Linha,&*Coluna);
 		}
 		gotoxy(4 + 3*raiz->ponto[0],48 - raiz->ponto[1]);
 		textcolor(0);
@@ -208,9 +275,9 @@ void ExibeDados (int Ponto[K], int raio) {
 	system("mode con cols=133 lines=52");
 	Moldura(1,1,133,52,0,3);
 	FundoQuadro(1,1,133,52,3);
-	
+
 	strcat(Print,"PONTO DE REFERENCIA: (");
-	for(i=0;i<K;i++) {
+	for(i=0; i<K; i++) {
 		sprintf(aux,"%d",Ponto[i]);
 		strcat(Print,aux);
 		if(i+1 == K)
@@ -223,7 +290,28 @@ void ExibeDados (int Ponto[K], int raio) {
 	ExibeTexto(130,3,0,7,Print,"DADOS:");
 }
 
+void InsereMolduraMatriz (Pont **Linha, Pont **Coluna, int CI, int LI, int CF, int LF) {
+	int i;
+	
+	InsereMat(&*Linha,&*Coluna,LI,CI,201);
+	InsereMat(&*Linha,&*Coluna,LI,CF,187);
+	InsereMat(&*Linha,&*Coluna,LF,CI,200);
+	InsereMat(&*Linha,&*Coluna,LF,CF,188);
+	for(i=CI+1; i<CF; i++) {
+		InsereMat(&*Linha,&*Coluna,LI,i,205);
+		InsereMat(&*Linha,&*Coluna,LF,i,205);
+	}
+	for(i=LI+1; i<LF; i++) {
+		InsereMat(&*Linha,&*Coluna,i,CI,186);
+		InsereMat(&*Linha,&*Coluna,i,CF,186);
+	}
+}
+
 void ExibePlano (KDTree *raiz, int Ponto[K], int CI, int LI, int CF, int LF, int N) {
+	Pont *Linha, *Coluna;
+	Init(&Linha,&Coluna);
+	
+
 	Moldura(CI,LI,CF,LF,0,8);
 	FundoQuadro(CI,LI,CF,LF,8);
 	Sombra(CI,LI,CF,LF,0);
@@ -231,9 +319,10 @@ void ExibePlano (KDTree *raiz, int Ponto[K], int CI, int LI, int CF, int LF, int
 
 	Moldura(CI+3,LI+1,CI+120,LI+40,0,7);
 	FundoQuadro(CI+3,LI+1,CI+120,LI+40,7);
-
-	DesenhaPlano(raiz,CI+3,LI+1,CI+120,LI+40,0);
-
+	
+	InsereMolduraMatriz(&Linha,&Coluna,1,1,40,40);
+	DesenhaPlano(raiz,CI+3,LI+1,CI+120,LI+40,0,&Linha,&Coluna);
+	
 	gotoxy(CI + Ponto[0]*3,48 - Ponto[1]);
 	textcolor(12);
 	printf("%c (%d,%d)",207,Ponto[0],Ponto[1]);
@@ -299,10 +388,10 @@ void ExibeArvore(KDTree *raiz) {
 double DistanciaEuclidiana (int A[K], int B[K]) {
 	int i;
 	double dif=0;
-	
-	for(i=0;i<K;i++)
+
+	for(i=0; i<K; i++)
 		dif += pow((A[i]-B[i]),2);
-	
+
 	return sqrt(dif);
 }
 

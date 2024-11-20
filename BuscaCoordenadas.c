@@ -5,6 +5,7 @@
 #include <windows.h>
 #include <conio2.h>
 #include "Headers\\Moldura.h"
+#include "Headers\\MatEsp.h"
 #include "Headers\\KDTree.h"
 #include "Headers\\Pilha.h"
 #include "Headers\\PilhaInt.h"
@@ -29,7 +30,6 @@ void InsereArvore (KDTree **raiz, int Pontos[TF][K]) {
 	pushI(&PN,1);
 	pushI(&PI,ini);
 	pushI(&PF,fim);
-
 
 	while(!isEmpty(P)) {
 		pop(&P,&Pai);
@@ -100,11 +100,10 @@ int main (void) {
 
 	ExibeDados(Ponto,raio);
 	ExibePlano(T,Ponto,4,7,130,49,0); // Funciona apenas para 2D
-	BuscaProximos(&L,T,Ponto,raio);
 	getch();
+	BuscaProximos(&L,T,Ponto,raio);
 	ExibeProximos(L);
 	getch();
-
 
 	MsgFim();
 	getch();
