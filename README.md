@@ -10,7 +10,7 @@
     <li><p>Criar uma estrutura de árvore de K dimensões, gerando pontos aleatórios para o preenchimento.</p></li>
     <li><p>A partir de um ponto e um raio, gerados aleatoriamente, buscar os pontos na árvore que estão dentro do raio.</p></li>
     <li><p>Utilização de Matriz Esparsa para controle de sobreposição de caracteres na tela.</p></li>
-    <li><p>Interface amigável utilizando biblioteca Conio2.</p></li>
+    <li><p>Interface amigável utilizando a biblioteca Conio2.</p></li>
   </ul>
 </div>
 <div>
