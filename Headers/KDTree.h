@@ -293,10 +293,10 @@ void ExibeDados (int Ponto[K], int raio) {
 void InsereMolduraMatriz (Pont **Linha, Pont **Coluna, int CI, int LI, int CF, int LF) {
 	int i;
 	
-	InsereMat(&*Linha,&*Coluna,LI,CI,201);
-	InsereMat(&*Linha,&*Coluna,LI,CF,187);
-	InsereMat(&*Linha,&*Coluna,LF,CI,200);
-	InsereMat(&*Linha,&*Coluna,LF,CF,188);
+	InsereMat(&*Linha,&*Coluna,LI,CI,200);
+	InsereMat(&*Linha,&*Coluna,LI,CF,188);
+	InsereMat(&*Linha,&*Coluna,LF,CI,201);
+	InsereMat(&*Linha,&*Coluna,LF,CF,187);
 	for(i=CI+1; i<CF; i++) {
 		InsereMat(&*Linha,&*Coluna,LI,i,205);
 		InsereMat(&*Linha,&*Coluna,LF,i,205);
@@ -310,7 +310,6 @@ void InsereMolduraMatriz (Pont **Linha, Pont **Coluna, int CI, int LI, int CF, i
 void ExibePlano (KDTree *raiz, int Ponto[K], int CI, int LI, int CF, int LF, int N) {
 	Pont *Linha, *Coluna;
 	Init(&Linha,&Coluna);
-	
 
 	Moldura(CI,LI,CF,LF,0,8);
 	FundoQuadro(CI,LI,CF,LF,8);
@@ -322,6 +321,10 @@ void ExibePlano (KDTree *raiz, int Ponto[K], int CI, int LI, int CF, int LF, int
 	
 	InsereMolduraMatriz(&Linha,&Coluna,1,1,40,40);
 	DesenhaPlano(raiz,CI+3,LI+1,CI+120,LI+40,0,&Linha,&Coluna);
+	
+	/*system("cls"); // Função de teste para exibição da Matriz Esparsa
+	ExibeMatriz(Linha);
+	getch();*/	
 	
 	gotoxy(CI + Ponto[0]*3,48 - Ponto[1]);
 	textcolor(12);

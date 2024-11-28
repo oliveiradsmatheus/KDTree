@@ -65,19 +65,28 @@ void InsereArvore (KDTree **raiz, int Pontos[TF][K]) {
 
 void BuscaProximos (Lista **L, KDTree *raiz, int Pto[K], int raio) {
 	Pilha *P;
-	Pilha *Pf;
+	PilhaI *Pn;
+	int nivel, D;
 
 	init(&P);
+	initI(&Pn);
 	push(&P,raiz);
+	push(&Pn,0);
 	while(!isEmpty(P)) {
 		pop(&P,&raiz);
+		pop(&Pn,&nivel);
+		D = nivel % K;
 		if(raiz) {
 			if(DistanciaEuclidiana(Pto,raiz->ponto) <= raio)
 				InsereLista(&*L,raiz);
-			if(raiz->dir)
+			if(raiz->dir && ((Pto[D]-raio >= raiz->ponto[D]) || (Pto[D]+raio >= raiz->ponto[D]))) {
 				push(&P,raiz->dir);
-			if(raiz->esq)
+				push(&Pn,nivel+1);
+			}
+			if(raiz->esq && ((Pto[D]-raio <= raiz->ponto[D]) || (Pto[D]+raio <= raiz->ponto[D]))) {
 				push(&P,raiz->esq);
+				push(&Pn,nivel+1);
+			}
 		}
 	}
 }

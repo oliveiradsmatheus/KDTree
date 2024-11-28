@@ -145,13 +145,14 @@ void InsereMat (Pont **Linha, Pont** Coluna, int i, int j, int valor) {
 }
 
 void ExibeMatriz (Pont *Linha) {
-	int cont, exibe, i;
+	int cont, exibe, i, linha=40; // Linha para exibir a matriz de ponta-cabeça
 	Pont *aux = Linha;
 	MatEsp *atual;
 
 	while(aux) {
 		atual = aux->Campo;
 		cont = 0;
+		gotoxy(1,linha);
 		while(atual) {
 			if(atual->coluna > cont) {
 				for(i = cont; i < atual->coluna; i++)
@@ -161,7 +162,8 @@ void ExibeMatriz (Pont *Linha) {
 			printf("%c",atual->valor);
 			atual = atual->pL;
 		}
-		printf("\n");
+		linha--;
+		//printf("\n");
 		aux = aux->prox;
 	}
 }
