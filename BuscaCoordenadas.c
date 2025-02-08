@@ -2,6 +2,16 @@
 #include <math.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
+#ifdef __linux__
+#include <locale.h>
+#include "Headers/conio_linux.h"
+#include "Headers/Moldura.h"
+#include "Headers/MatEsp.h"
+#include "Headers/KDTree.h"
+#include "Headers/Pilha.h"
+#include "Headers/PilhaInt.h"
+#else
 #include <windows.h>
 #include <conio2.h>
 #include "Headers\\Moldura.h"
@@ -9,6 +19,7 @@
 #include "Headers\\KDTree.h"
 #include "Headers\\Pilha.h"
 #include "Headers\\PilhaInt.h"
+#endif
 
 void InsereArvore (KDTree **raiz, int Pontos[TF][K]) {
 	Pilha *P;
@@ -91,19 +102,23 @@ void BuscaProximos (Lista **L, KDTree *raiz, int Pto[K], int raio) {
 	}
 }
 
-int main (void) {
+int main (void) { // Compilar no Linux com gcc BuscaCoordenadas.c -o BuscaCoordenadas -lcurses -lm
 	KDTree *T = NULL;
 	Lista *L = NULL;
 	int Pontos[TF][K], Ponto[K], raio;
 
+#ifdef __linux__
+	setlocale(LC_ALL, "");
+	initconio();
+#endif
 	RetiraCursor();
-	Dimensao();
+	Dimensao("114", "22");
 	MolduraCompleta();
 
-	InserePontos(Pontos,Ponto,&raio); // Gera 20 pontos aleatórios (X dimensões) de 1 a 40.
-	ExibePontos(Pontos); // Exibe os pontos antes da ordenação (2 dimensões)
-	//InsereArvoreR(&T,Pontos,0,TF,0); // Insere os pontos na árvore do tipo KD-Tree de maneira Recursiva
-	InsereArvore(&T,Pontos); // Insere os pontos na árvore do tipo KD-Tree de maneira Iterativa
+	InserePontos(Pontos,Ponto,&raio); // Gera 20 pontos aleatï¿½rios (X dimensï¿½es) de 1 a 40.
+	ExibePontos(Pontos); // Exibe os pontos antes da ordenaï¿½ï¿½o (2 dimensï¿½es)
+	//InsereArvoreR(&T,Pontos,0,TF,0); // Insere os pontos na ï¿½rvore do tipo KD-Tree de maneira Recursiva
+	InsereArvore(&T,Pontos); // Insere os pontos na ï¿½rvore do tipo KD-Tree de maneira Iterativa
 	ExibeArvore(T);
 	getch();
 
@@ -116,6 +131,9 @@ int main (void) {
 
 	MsgFim();
 	getch();
+#ifdef __linux__
+	endconio();
+#endif
 
 	return 0;
 }
